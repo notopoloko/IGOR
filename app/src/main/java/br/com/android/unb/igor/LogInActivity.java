@@ -43,12 +43,12 @@ public class LogInActivity extends AppCompatActivity {
         });
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        findViewById(R.id.signOut).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-            }
-        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FirebaseAuth.getInstance().signOut();
     }
 
     private void signIn() {
@@ -109,8 +109,6 @@ public class LogInActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }

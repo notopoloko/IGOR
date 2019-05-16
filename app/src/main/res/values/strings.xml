@@ -1,4 +1,13 @@
 <resources>
+    <!--Tela de Login-->
     <string name="app_name">IGOR</string>
     <string name="signout">Sign Out</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="ou">Ou</string>
+    <string name="esqueci_minha_senha">esqueci minha senha</string>
+    <string name="criar_conta">criar conta</string>
+    <string name="entrar">ENTRAR</string>
+    <string name="manter_conectado">manter-me conectado</string>
+
 </resources>
