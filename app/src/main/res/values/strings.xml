@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">IGOR</string>
+    <string name="signout">Sign Out</string>
 </resources>
