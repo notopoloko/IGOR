@@ -38,9 +38,9 @@ public class AventuraFragment extends Fragment {
     private void updateUI(){
         // Inicilizar aventuras
         List<Aventura> aventuras = new ArrayList<Aventura>();
-        aventuras.add(new Aventura("Shunn Lee, o FastFoot...", new Date(), 0));
-        aventuras.add(new Aventura("Campos de Nhame", new Date(), 0));
-        aventuras.add(new Aventura("Meau, o cachorro-gato", new Date(), 0));
+        aventuras.add(new Aventura("Shunn Lee, o FastFoot...", new Date(), 2));
+        aventuras.add(new Aventura("Campos de Nhame", new Date(), 5));
+        aventuras.add(new Aventura("Meau, o cachorro-gato", new Date(), 3));
         if (mAventuraAdapter == null) {
             mAventuraAdapter = new AventuraAdapter(aventuras);
             mAventuraRecyclerView.setAdapter(mAventuraAdapter);

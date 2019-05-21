@@ -7,4 +7,7 @@
     <color name="white_maroto">#FFF</color>
     <color name="fundo_botao_entrar">#00e2ba</color>
     <color name="top_layout">#050F2B</color>
+    <color name="dark_white">#D6D3D3</color>
+
+    <color name="dark">#424242</color>
 </resources>
