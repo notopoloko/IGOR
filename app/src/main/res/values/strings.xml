@@ -13,4 +13,7 @@
 
     <!--Lista de aventuras-->
     <string name="igor_icon">Icone IGOR</string>
+    <string name="aventura_name">NOME DA AVENTURA</string>
+    <string name="proxima_sessao">Próxima sessão</string>
+
 </resources>

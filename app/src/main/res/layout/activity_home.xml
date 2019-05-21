@@ -39,6 +39,7 @@
         android:scaleType="fitXY"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:elevation="0dp"
         android:backgroundTint="@android:color/transparent"
         app:borderWidth="0dp"
         android:src="@drawable/botao_criar_nova_aventura"
