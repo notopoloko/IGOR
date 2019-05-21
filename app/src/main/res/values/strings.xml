@@ -9,5 +9,8 @@
     <string name="criar_conta">criar conta</string>
     <string name="entrar">ENTRAR</string>
     <string name="manter_conectado">manter-me conectado</string>
+    <string name="title_activity_home">HomeActivity</string>
 
+    <!--Lista de aventuras-->
+    <string name="igor_icon">Icone IGOR</string>
 </resources>

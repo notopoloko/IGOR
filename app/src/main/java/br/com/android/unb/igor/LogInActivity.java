@@ -90,6 +90,8 @@ public class LogInActivity extends AppCompatActivity {
             Toast.makeText(this, "Successful signed in with firebase", Toast.LENGTH_SHORT).show();
             TextView mTextView = findViewById(R.id.textView);
             mTextView.setText(String.format("Olá, %s", account.getDisplayName()));
+
+            startActivity(HomeActivity.newIntent(this));
         } else {
             Toast.makeText(this, "Authentication failed with firebase", Toast.LENGTH_SHORT).show();
         }
