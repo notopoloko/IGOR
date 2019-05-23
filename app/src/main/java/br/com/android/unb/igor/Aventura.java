@@ -13,6 +13,12 @@ public class Aventura {
         this.nImage = nImage;
     }
 
+    public Aventura(String nome, Date data, Long nImage) {
+        this.nome = nome;
+        this.data = data;
+        this.nImage = nImage.intValue();
+    }
+
     public String getNome() {
         return nome;
     }

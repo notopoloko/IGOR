@@ -14,9 +14,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class AventuraFragment extends Fragment {
     private RecyclerView mAventuraRecyclerView;
@@ -30,19 +37,57 @@ public class AventuraFragment extends Fragment {
         mAventuraRecyclerView = view.findViewById(R.id.aventura_recycler_view);
         mAventuraRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // Atualizar view com dados vindos do Firebase
-        updateUI();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("aventuras").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<Aventura> aventuras = new ArrayList<>();
+                    for (QueryDocumentSnapshot document: task.getResult()) {
+                        // Pensar numa maneira deixar isso generalizado
+                        Map<String, Object> data = document.getData();
+                        aventuras.add(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue()));
+                    }
+                    updateUI(aventuras);
+                } else {
+                    Toast.makeText(getContext(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return view;
     }
 
-    private void updateUI(){
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("aventuras").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<Aventura> aventuras = new ArrayList<>();
+                    for (QueryDocumentSnapshot document: task.getResult()) {
+                        // Pensar numa maneira deixar isso generalizado
+                        Map<String, Object> data = document.getData();
+                        aventuras.add(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue()));
+                    }
+                    updateUI(aventuras);
+                } else {
+                    Toast.makeText(getContext(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void updateUI(List<Aventura> aventuraList){
         // Inicilizar aventuras
-        List<Aventura> aventuras = new ArrayList<Aventura>();
-        aventuras.add(new Aventura("Shunn Lee, o FastFoot...", new Date(), 2));
-        aventuras.add(new Aventura("Campos de Nhame", new Date(), 5));
-        aventuras.add(new Aventura("Meau, o cachorro-gato", new Date(), 3));
+        // List<Aventura> aventuras = new ArrayList<Aventura>();
+//        aventuras.add(new Aventura("Shunn Lee, o FastFoot...", new Date(), 2));
+//        aventuras.add(new Aventura("Campos de Nhame", new Date(), 5));
+//        aventuras.add(new Aventura("Meau, o cachorro-gato", new Date(), 3));
         if (mAventuraAdapter == null) {
-            mAventuraAdapter = new AventuraAdapter(aventuras);
+            mAventuraAdapter = new AventuraAdapter(aventuraList);
             mAventuraRecyclerView.setAdapter(mAventuraAdapter);
         } else {
             mAventuraAdapter.notifyDataSetChanged();
@@ -65,7 +110,23 @@ public class AventuraFragment extends Fragment {
         public void bindAventura(Aventura aventura) {
             // Adicionair mais itens
             mAventuraTitulo.setText(aventura.getNome());
-            mConstraintLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.miniatura_imagem_automatica));
+            switch(aventura.getnImage()){
+                case 0:
+                    mConstraintLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.miniatura_coast));
+                    break;
+                case 1:
+                    mConstraintLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.miniatura_corvali));
+                    break;
+                case 2:
+                    mConstraintLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.miniatura_heartlands));
+                    break;
+                case 3:
+                    mConstraintLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.miniatura_imagem_automatica));
+                    break;
+                case 4:
+                    mConstraintLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.miniatura_krevast));
+                    break;
+            }
         }
 
         @Override

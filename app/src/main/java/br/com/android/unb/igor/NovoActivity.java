@@ -3,6 +3,7 @@ package br.com.android.unb.igor;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,12 +16,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
 import java.util.Random;
 
 public class NovoActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private Random mRandom;
+    private Random mRandom = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +47,27 @@ public class NovoActivity extends AppCompatActivity implements NavigationView.On
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Aventura aventura;
                 EditText titulo = findViewById(R.id.titulo);
                 String aventuraTitulo = titulo.getText().toString();
                 if (aventuraTitulo.equals("")){
-                    Aventura aventura = new Aventura("Aventura sem título", new Date(), mRandom.nextInt(5));
+                    aventura = new Aventura("Aventura sem título", new Date(), mRandom.nextInt(5));
                 } else {
-                    Aventura aventura = new Aventura(aventuraTitulo, new Date(), mRandom.nextInt(5));
+                    aventura = new Aventura(aventuraTitulo, new Date(), mRandom.nextInt(5));
                 }
-
-
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("aventuras").add(aventura).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getApplicationContext(), "Aventura criada", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Falha no registro da aventura", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                finish();
             }
         });
     }
