@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity"
-    android:background="@drawable/overlay_home">
+    android:background="@color/overlay"
+    tools:context=".HomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

@@ -14,12 +14,13 @@
         android:layout_height="match_parent" />
 
     <android.support.design.widget.NavigationView
-        android:background="@drawable/aba_de_conteudo"
+        android:backgroundTint="@color/navabar_background_color"
         android:id="@+id/nav_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:itemTextColor="@color/rediant_red"
         app:menu="@menu/activity_novo_drawer" />
 
 </android.support.v4.widget.DrawerLayout>
