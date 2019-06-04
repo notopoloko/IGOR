@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -43,17 +44,30 @@ public class NovoActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        ImageButton fechar = findViewById(R.id.fechar);
+        fechar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         ImageButton imageButton = findViewById(R.id.pronto);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Aventura aventura;
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+
                 EditText titulo = findViewById(R.id.titulo);
                 String aventuraTitulo = titulo.getText().toString();
+
+                EditText sinopse = findViewById(R.id.aventura_sinopse);
+                String aventuraSinopse = sinopse.getText().toString();
                 if (aventuraTitulo.equals("")){
-                    aventura = new Aventura("Aventura sem título", new Date(), mRandom.nextInt(5));
+                    aventura = new Aventura("Aventura sem título", new Date(), mRandom.nextInt(5), auth.getUid(), aventuraSinopse);
                 } else {
-                    aventura = new Aventura(aventuraTitulo, new Date(), mRandom.nextInt(5));
+                    aventura = new Aventura(aventuraTitulo, new Date(), mRandom.nextInt(5), auth.getUid(), aventuraSinopse);
                 }
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection("aventuras").add(aventura).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -118,11 +132,11 @@ public class NovoActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_tools) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+        }// else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

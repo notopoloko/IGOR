@@ -38,7 +38,11 @@ public class LogInActivity extends AppCompatActivity {
         findViewById(R.id.signInButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn();
+                if (mFirebaseAuth.getUid() != null) {
+                    startActivity(HomeActivity.newIntent(getApplicationContext()));
+                } else {
+                    signIn();
+                }
             }
         });
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -74,15 +78,15 @@ public class LogInActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-//        updateUI(account);
-
-        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+////        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+////        updateUI(account);
+//
+//        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
+//        updateUI(currentUser);
+//    }
 
     private void updateUI(FirebaseUser account) {
         if (account != null) {

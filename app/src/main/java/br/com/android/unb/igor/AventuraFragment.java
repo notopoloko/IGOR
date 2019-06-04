@@ -1,5 +1,6 @@
 package br.com.android.unb.igor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ public class AventuraFragment extends Fragment {
         View view = inflater.inflate(R.layout.content_home, container, false);
 
         mAventuraRecyclerView = view.findViewById(R.id.aventura_recycler_view);
+
         mAventuraRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // Atualizar view com dados vindos do Firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -46,7 +48,7 @@ public class AventuraFragment extends Fragment {
                     for (QueryDocumentSnapshot document: task.getResult()) {
                         // Pensar numa maneira deixar isso generalizado
                         Map<String, Object> data = document.getData();
-                        aventuras.add(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue()));
+                        aventuras.add(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue(), document.getString("mestre"), document.getString("sinopse")));
                     }
                     updateUI(aventuras);
                 } else {
@@ -66,11 +68,19 @@ public class AventuraFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    ArrayList<Aventura> aventuras = new ArrayList<>();
+
+                    List<Aventura> aventuras;
+                    if (mAventuraAdapter == null){
+                        aventuras = new ArrayList<Aventura>();
+                    } else {
+                        aventuras = mAventuraAdapter.getAdapterAventuras();
+                        aventuras.clear();
+                    }
+
                     for (QueryDocumentSnapshot document: task.getResult()) {
                         // Pensar numa maneira deixar isso generalizado
                         Map<String, Object> data = document.getData();
-                        aventuras.add(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue()));
+                        aventuras.add(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue(), document.getString("mestre"), document.getString("sinopse")));
                     }
                     updateUI(aventuras);
                 } else {
@@ -81,11 +91,6 @@ public class AventuraFragment extends Fragment {
     }
 
     private void updateUI(List<Aventura> aventuraList){
-        // Inicilizar aventuras
-        // List<Aventura> aventuras = new ArrayList<Aventura>();
-//        aventuras.add(new Aventura("Shunn Lee, o FastFoot...", new Date(), 2));
-//        aventuras.add(new Aventura("Campos de Nhame", new Date(), 5));
-//        aventuras.add(new Aventura("Meau, o cachorro-gato", new Date(), 3));
         if (mAventuraAdapter == null) {
             mAventuraAdapter = new AventuraAdapter(aventuraList);
             mAventuraRecyclerView.setAdapter(mAventuraAdapter);
@@ -95,13 +100,13 @@ public class AventuraFragment extends Fragment {
     }
 
     private class AventuraHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private Aventura mAventura;
 
         private ConstraintLayout mConstraintLayout;
         private TextView mAventuraTitulo;
 
         public AventuraHolder (View itemView){
             super(itemView);
+            itemView.setOnClickListener(this);
             // Adicionair mais itens
             mAventuraTitulo = itemView.findViewById(R.id.titulo_aventura);
             mConstraintLayout = itemView.findViewById(R.id.list_item);
@@ -131,7 +136,8 @@ public class AventuraFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(getContext(), "Não implementado", Toast.LENGTH_SHORT).show();
+            Intent i = AventuraAndamentoActivity.newIntent(getContext(), mAventuraTitulo.getText().toString());
+            startActivity(i);
         }
     }
 
@@ -158,6 +164,10 @@ public class AventuraFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mAventuras.size();
+        }
+
+        public List<Aventura> getAdapterAventuras(){
+            return mAventuras;
         }
     }
 }

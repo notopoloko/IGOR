@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/igor_login_backgrownd2"
+    app:layout_constraintCircleRadius="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".NovoActivity"
     tools:showIn="@layout/app_bar_novo">
@@ -31,18 +32,18 @@
             android:layout_marginTop="16dp"
             android:text="@string/criar_aventura"
             android:textColor="@color/fundo_botao_entrar"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toEndOf="@+id/fechar"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView2"
+        <ImageButton
+            android:id="@+id/fechar"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="18dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/botao_fechar" />
+            android:background="@drawable/botao_fechar" />
 
         <TextView
             android:id="@+id/textView6"
@@ -83,7 +84,43 @@
             android:layout_marginEnd="50dp"
             android:background="@drawable/botao_pronto"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titulo" />
+            app:layout_constraintTop_toBottomOf="@+id/aventura_sinopse" />
+
+        <EditText
+            android:id="@+id/aventura_sinopse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/dark"
+            android:ems="10"
+            android:hint="@string/sinopse_aventura"
+            android:inputType="textMultiLine"
+            android:textSize="16sp"
+            android:textColor="@color/dark"
+            android:textColorHint="@color/dark"
+            android:textCursorDrawable="@null"
+            android:typeface="sans"
+            android:maxLines="5"
+            app:layout_constraintBottom_toTopOf="@+id/pronto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/sinopse_aventura"
+            android:textColor="#877D91"
+            app:layout_constraintBottom_toTopOf="@+id/aventura_sinopse"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titulo" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.AppCompatImageView
