@@ -87,11 +87,11 @@ public class AventuraAndamentoActivity extends AppCompatActivity
             }
         });
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new AventuraAndamentoPagerAdapter(getSupportFragmentManager(), AventuraAndamentoActivity.this));
+        ViewPager viewPager = findViewById(R.id.viewpager);
+        viewPager.setAdapter(new AventuraAndamentoPagerAdapter(getSupportFragmentManager()));
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -114,8 +114,8 @@ public class AventuraAndamentoActivity extends AppCompatActivity
                 miniaturaImageView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.miniatura_krevast));
                 break;
         }
-        TextView sinopseTexto = findViewById(R.id.sinopseTexto);
-        sinopseTexto.setText(aventura.getSinopse());
+//        TextView sinopseTexto = findViewById(R.id.sinopseTexto);
+//        sinopseTexto.setText(aventura.getSinopse());
     }
 
     @Override

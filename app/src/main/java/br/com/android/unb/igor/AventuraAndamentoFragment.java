@@ -1,12 +1,9 @@
 package br.com.android.unb.igor;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +31,15 @@ public class AventuraAndamentoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_aventura_andamento, container, false);
-        TextView textView = (TextView) view.findViewById(R.id.experimental_text);
-        textView.setText("Text");
-        return view;
+        if (mPage == 0){
+            View view = inflater.inflate(R.layout.fragment_aventura_andamento, container, false);
+
+            TextView sinopseAventura = view.findViewById(R.id.sinopseAventura);
+            sinopseAventura.setText("");
+            return view;
+        } else {
+            View v = inflater.inflate(R.layout.fragment_aventura_andamento_jogadores, container, false);
+            return v;
+        }
     }
 }
