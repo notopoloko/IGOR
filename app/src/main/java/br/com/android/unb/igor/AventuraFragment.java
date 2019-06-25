@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class AventuraFragment extends Fragment {
     private RecyclerView mAventuraRecyclerView;
@@ -51,7 +52,13 @@ public class AventuraFragment extends Fragment {
                     for (QueryDocumentSnapshot document: task.getResult()) {
                         // Pensar numa maneira deixar isso generalizado
                         Map<String, Object> data = document.getData();
-                        aventuras.add(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue(), document.getString("mestre"), document.getString("sinopse")));
+                        aventuras.add(new Aventura(
+                                data.get("nome").toString(),
+                                new Date(),
+                                document.getLong("nImage").intValue(),
+                                document.getString("mestre"),
+                                document.getString("sinopse"),
+                                UUID.randomUUID()));
                     }
                     updateUI(aventuras);
                 } else {
@@ -84,7 +91,13 @@ public class AventuraFragment extends Fragment {
                     for (QueryDocumentSnapshot document: task.getResult()) {
                         // Pensar numa maneira deixar isso generalizado
                         Map<String, Object> data = document.getData();
-                        aventuras.add(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue(), document.getString("mestre"), document.getString("sinopse")));
+                        aventuras.add(new Aventura(
+                                data.get("nome").toString(),
+                                new Date(),
+                                document.getLong("nImage").intValue(),
+                                document.getString("mestre"),
+                                document.getString("sinopse"),
+                                UUID.fromString(document.getId())));
                     }
                     updateUI(aventuras);
                 } else {
@@ -107,6 +120,7 @@ public class AventuraFragment extends Fragment {
 
         private ConstraintLayout mConstraintLayout;
         private TextView mAventuraTitulo;
+        private Aventura mAventura;
 
         public AventuraHolder (View itemView){
             super(itemView);
@@ -118,8 +132,9 @@ public class AventuraFragment extends Fragment {
 
         public void bindAventura(Aventura aventura) {
             // Adicionair mais itens
-            mAventuraTitulo.setText(aventura.getNome());
-            switch(aventura.getnImage()){
+            mAventura = aventura;
+            mAventuraTitulo.setText(mAventura.getNome());
+            switch(mAventura.getnImage()){
                 case 0:
                     mConstraintLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.miniatura_coast));
                     break;
@@ -140,7 +155,8 @@ public class AventuraFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Intent i = AventuraAndamentoActivity.newIntent(getContext(), mAventuraTitulo.getText().toString());
+            String id = mAventura.getId().toString();
+            Intent i = AventuraAndamentoActivity.newIntent(getContext(), id);
             startActivity(i);
         }
     }

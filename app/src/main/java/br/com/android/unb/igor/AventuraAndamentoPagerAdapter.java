@@ -1,18 +1,15 @@
 package br.com.android.unb.igor;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class AventuraAndamentoPagerAdapter extends FragmentPagerAdapter {
-    private static final String tabTitles[] = { "ANDAMENTO", "JOGADORES"};
+    private static final String[] tabTitles = { "ANDAMENTO", "JOGADORES"};
     private static final int PAGE_COUNT = tabTitles.length;
-    private Aventura mAventura;
 
-    public AventuraAndamentoPagerAdapter(FragmentManager fm, Aventura aventura) {
+    public AventuraAndamentoPagerAdapter(FragmentManager fm) {
         super(fm);
-        mAventura = aventura;
     }
 
     @Override
@@ -22,9 +19,9 @@ public class AventuraAndamentoPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        AventuraAndamentoFragment fragment = AventuraAndamentoFragment.newInstance(position);
+        return AventuraAndamentoFragment.newInstance(position);
 
-        return fragment;
+//        return fragment;
     }
 
     @Override

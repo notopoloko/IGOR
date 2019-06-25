@@ -35,14 +35,19 @@
     <string name="criar_aventura">Criar Aventura</string>
     <string name="label_nome">Dê um nome para a sua aventura</string>
     <string name="nome_aventura">Digite o nome da aventura</string>
-    <string name="label_sinopse_aventura">Dê uma sinopse à sua sua aventura</string>
+    <string name="label_sinopse_aventura">Dê uma sinopse à sua aventura</string>
     <string name="sinopse_aventura">Digite a sinopse da sua aventura</string>
     <string name="andamento">Andamento</string>
     <string name="jogadores">Jogadores</string>
     <string name="title_activity_aventura_andamento">AventuraAndamentoActivity</string>
+    <string name="no_description">Aventura sem descrição</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
+    
+    <!--Aventura Andamento-->
+    <string name="mestre">Mestre</string>
+    <string name="date_picker_title">Data da nova sessão</string>
 </resources>

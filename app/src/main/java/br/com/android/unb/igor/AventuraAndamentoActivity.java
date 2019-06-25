@@ -7,8 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,29 +22,42 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 public class AventuraAndamentoActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String aventura_nome = "br.unb.android.igor.aventuraNome";
+    private static final String aventura_id = "br.unb.android.igor.aventuraid";
+    private static final String DIALOG_DATE = "DialogDate";
 
-    public static Intent newIntent(Context packageContext, String nomeAventura) {
+    public static Intent newIntent(Context packageContext, String idAventura) {
         Intent intent = new Intent(packageContext, AventuraAndamentoActivity.class);
-        intent.putExtra(aventura_nome, nomeAventura);
+        intent.putExtra(aventura_id, idAventura);
         return intent;
     }
 
@@ -55,7 +71,11 @@ public class AventuraAndamentoActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Não implementando", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Não implementando", Toast.LENGTH_SHORT).show();
+                FragmentManager fm = getSupportFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(new Date());
+//                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+                dialog.show(fm, DIALOG_DATE);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -69,30 +89,31 @@ public class AventuraAndamentoActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("aventuras").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document: task.getResult()) {
-                        // Pensar numa maneira deixar isso generalizado
-                        Map<String, Object> data = document.getData();
-                        if (data.get("nome").toString().equals(getIntent().getStringExtra(aventura_nome))) {
-                            updateUI(new Aventura(data.get("nome").toString(), new Date(), document.getLong("nImage").intValue(), document.getString("mestre"), document.getString("sinopse")));
-                        }
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         ViewPager viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(new AventuraAndamentoPagerAdapter(getSupportFragmentManager()));
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+
+        Service.getAventuraByID(getIntent().getStringExtra(aventura_id)).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot ds = task.getResult();
+                if (ds != null){
+                    updateUI(new Aventura(ds.get("nome").toString(),
+                            new Date(),
+                            ds.getLong("nImage").intValue(),
+                            ds.get("mestre").toString(),
+                            ds.get("sinopse").toString(),
+                            UUID.fromString(ds.getId()))
+                );
+                } else {
+                    Toast.makeText(getApplicationContext(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void updateUI(Aventura aventura) {
@@ -114,8 +135,47 @@ public class AventuraAndamentoActivity extends AppCompatActivity
                 miniaturaImageView.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.miniatura_krevast));
                 break;
         }
-//        TextView sinopseTexto = findViewById(R.id.sinopseTexto);
-//        sinopseTexto.setText(aventura.getSinopse());
+        TextView sinopseTexto = findViewById(R.id.sinopseAventura);
+        if (aventura.getSinopse().length() == 0){
+            sinopseTexto.setText(R.string.no_description);
+        } else {
+            sinopseTexto.setText(aventura.getSinopse());
+        }
+
+        final TextView nomeMestre = findViewById(R.id.nomeJogador);
+        Service.getJogador(aventura.getMestre()).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot ds = task.getResult();
+                if (ds != null){
+                    nomeMestre.setText(ds.get("nome").toString());
+                } else {
+                    Toast.makeText(AventuraAndamentoActivity.this, "Erro ao resgatar o mestre", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        TextView tituloAventura = findViewById(R.id.aventuraTitulo);
+        tituloAventura.setText(aventura.getNome());
+
+        // Pegar foto de usuario
+        final ImageView iconeJogador = findViewById(R.id.iconeJogador);
+        File localFile = null;
+        try {
+            localFile = File.createTempFile("caozinho1", "jpg");
+        } catch (IOException io) {
+            Toast.makeText(this, "Erro no arquivo", Toast.LENGTH_SHORT).show();
+        }
+        final File localFileTemp = localFile;
+        StorageReference sr = FirebaseStorage.getInstance().getReference().child("caozinho1.jpg");
+        sr.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                Toast.makeText(AventuraAndamentoActivity.this, "Baixou arquivo", Toast.LENGTH_SHORT).show();
+                // Alterar para qualquer jogador
+                Picasso.get().load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).resize(60,60).into(iconeJogador);
+            }
+        });
     }
 
     @Override

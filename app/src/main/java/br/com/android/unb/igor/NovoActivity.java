@@ -22,10 +22,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 public class NovoActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Random mRandom = new Random();
@@ -61,6 +61,7 @@ public class NovoActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
                 Aventura aventura;
                 FirebaseAuth auth = FirebaseAuth.getInstance();
+                String userName = auth.getCurrentUser() == null ? "Usuário sem nome" : auth.getCurrentUser().getUid();
 
                 EditText titulo = findViewById(R.id.titulo);
                 String aventuraTitulo = titulo.getText().toString();
@@ -68,14 +69,28 @@ public class NovoActivity extends AppCompatActivity implements NavigationView.On
                 EditText sinopse = findViewById(R.id.aventura_sinopse);
                 String aventuraSinopse = sinopse.getText().toString();
                 if (aventuraTitulo.equals("")){
-                    aventura = new Aventura("Aventura sem título", new Date(), mRandom.nextInt(5), auth.getUid(), aventuraSinopse);
+                    aventura = new Aventura(
+                            "Aventura sem título",
+                            new Date(),
+                            mRandom.nextInt(5),
+                            userName,
+                            aventuraSinopse,
+                            UUID.randomUUID()
+                    );
                 } else {
-                    aventura = new Aventura(aventuraTitulo, new Date(), mRandom.nextInt(5), auth.getUid(), aventuraSinopse);
+                    aventura = new Aventura(
+                            aventuraTitulo,
+                            new Date(),
+                            mRandom.nextInt(5),
+                            userName,
+                            aventuraSinopse,
+                            UUID.randomUUID()
+                    );
                 }
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("aventuras").add(aventura).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+                Service.postAventura(aventura).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         Toast.makeText(getApplicationContext(), "Aventura criada", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,14 @@ public class AventuraAndamentoFragment extends Fragment {
             return view;
         } else {
             View v = inflater.inflate(R.layout.fragment_aventura_andamento_jogadores, container, false);
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            Fragment fragment = fm.findFragmentById(R.id.jogador_item_frame_layout);
+
+            if (fragment == null) {
+                fragment  = new AventuraAndamentoJogadoresFragment();
+                fm.beginTransaction().add(R.id.jogador_item_frame_layout, fragment).commit();
+            }
+
             return v;
         }
     }

@@ -1,6 +1,7 @@
 package br.com.android.unb.igor;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.Date;
 
 public class LogInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 0;
@@ -35,17 +39,13 @@ public class LogInActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
         findViewById(R.id.signInButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mFirebaseAuth.getUid() != null) {
-                    startActivity(HomeActivity.newIntent(getApplicationContext()));
-                } else {
-                    signIn();
-                }
+                signIn();
             }
         });
-        mFirebaseAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -88,12 +88,37 @@ public class LogInActivity extends AppCompatActivity {
 //        updateUI(currentUser);
 //    }
 
-    private void updateUI(FirebaseUser account) {
+    private void updateUI(final FirebaseUser account) {
         if (account != null) {
-            Toast.makeText(this, "Successful signed in with firebase", Toast.LENGTH_SHORT).show();
-            startActivity(HomeActivity.newIntent(this));
+
+            Uri uriProfilePicture = account.getPhotoUrl();
+
+            final Jogador novoJogador = new Jogador(
+                    account.getUid(),
+                    account.getEmail(),
+                    "Sem senha",
+                    account.getDisplayName(),
+                    "Sem sexo",
+                    new Date()
+                    );
+            Service.getJogador(account.getUid()).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot ds = task.getResult();
+                    if (ds.getData() == null){
+                        Toast.makeText(LogInActivity.this, "Criando Jogador", Toast.LENGTH_SHORT).show();
+                        Service.postJogador(novoJogador);
+//                        Service.putProfilePicture(novoJogador.getId(), profilePicture);
+                    } else {
+                        Toast.makeText(LogInActivity.this, "Succesful signed in", Toast.LENGTH_SHORT).show();
+                    }
+                    startActivity(HomeActivity.newIntent(LogInActivity.this));
+                }
+            });
+
+
         } else {
-            Toast.makeText(this, "Authentication failed with firebase", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show();
         }
     }
 
