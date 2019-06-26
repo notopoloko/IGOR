@@ -50,4 +50,10 @@
     <!--Aventura Andamento-->
     <string name="mestre">Mestre</string>
     <string name="date_picker_title">Data da nova sessão</string>
+    
+    <!--Nova conta-->
+    <string name="nome_de_usuario">Nome de usuário</string>
+    <string name="data_nascimento">Data de nascimento</string>
+    <string name="sexo">Sexo</string>
+    <string name="criar">Criar</string>
 </resources>
