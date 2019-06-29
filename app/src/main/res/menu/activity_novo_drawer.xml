@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/aventuras_icone_notificacoes"
+            android:title="@string/aventuras" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/livros_icone_notificacao"
+            android:title="@string/livros" />
+        <item
+            android:iconTintMode="src_over"
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/conta_icone_notificacoes"
+            android:title="@string/conta" />
+        <item
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/notificacoes_icone_notificacao"
+            android:title="@string/notificacoes" />
+        <item
+            android:id="@+id/nav_config"
+            android:icon="@drawable/configuracoes_cone_notificacoes"
+            android:title="@string/configuracoes" />
+    </group>
+</menu>
