@@ -169,7 +169,7 @@ public class AventuraFragment extends Fragment {
         public void onClick(View view) {
             String id = mAventura.getId().toString();
             Bundle bundle = new Bundle();
-            bundle.putString(id, AventuraAndamentoFragment.aventura_id);
+            bundle.putString(AventuraAndamentoFragment.aventura_id, id);
             Navigation.findNavController(getActivity(), R.id.nav_host_aventura).navigate(R.id.action_aventuraFragment_to_aventuraAndamentoFragment, bundle);
         }
     }

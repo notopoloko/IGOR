@@ -35,10 +35,5 @@
         android:name="br.com.android.unb.igor.AventuraAndamento.AventuraAndamentoFragment"
         android:label="content_aventura_andamento"
         tools:layout="@layout/content_aventura_andamento">
-        <argument
-            android:name="aventuraID"
-            app:argType="String"
-            android:defaultValue="nada"
-            />
     </fragment>
 </navigation>

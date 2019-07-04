@@ -10,17 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import br.com.android.unb.igor.Model.Aventura;
 import br.com.android.unb.igor.R;
 
 public class AventuraAndamentoInfoFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
-
+    public Aventura aventura;
     private int mPage;
 
-    public static AventuraAndamentoInfoFragment newInstance(int page) {
+    public static AventuraAndamentoInfoFragment newInstance(int page, Aventura adventure) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         AventuraAndamentoInfoFragment fragment = new AventuraAndamentoInfoFragment();
+        fragment.aventura = adventure;
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,7 +40,7 @@ public class AventuraAndamentoInfoFragment extends Fragment {
             View view = inflater.inflate(R.layout.fragment_aventura_andamento, container, false);
 
             TextView sinopseAventura = view.findViewById(R.id.sinopseAventura);
-            sinopseAventura.setText("");
+            sinopseAventura.setText(aventura.getSinopse());
             return view;
         } else {
             View v = inflater.inflate(R.layout.fragment_aventura_andamento_jogadores, container, false);

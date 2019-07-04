@@ -38,28 +38,38 @@ public class AventuraAndamentoFragment extends Fragment {
     public static final String aventura_id = "br.unb.android.igor.aventuraid";
     private static final String DIALOG_DATE = "DialogDate";
 
+    private ImageView miniaturaImageView;
+    TextView sinopseTexto;
+    TextView tituloAventura;
+    ViewPager viewPager;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        savedInstanceState.getString(aventura_id, "");
-//        Service.getAventuraByID(getIntent().getStringExtra(aventura_id)).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                DocumentSnapshot ds = task.getResult();
-//                if (ds != null){
-//                    updateUI(new Aventura(ds.get("nome").toString(),
-//                            new Date(),
-//                            ds.getLong("nImage").intValue(),
-//                            ds.get("mestre").toString(),
-//                            ds.get("sinopse").toString(),
-//                            UUID.fromString(ds.getId()))
-//                );
-//                } else {
-//                    Toast.makeText(getActivity(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-
+        Bundle bundle = getArguments();
+        String id;
+        if (bundle != null) {
+            id = bundle.getString(aventura_id);
+            Service.getAventuraByID(id).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot ds = task.getResult();
+                    if (ds != null) {
+                        updateUI(new Aventura(ds.get("nome").toString(),
+                                new Date(),
+                                ds.getLong("nImage").intValue(),
+                                ds.get("mestre").toString(),
+                                ds.get("sinopse").toString(),
+                                UUID.fromString(ds.getId()))
+                        );
+                    } else {
+                        Toast.makeText(getActivity(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "Não foi possível obter o id da aventura", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Nullable
@@ -67,18 +77,44 @@ public class AventuraAndamentoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.content_aventura_andamento, container, false);
 
-        ViewPager viewPager = v.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new AventuraAndamentoPagerAdapter(getChildFragmentManager()));
+        viewPager = v.findViewById(R.id.viewpager);
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = v.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
+        miniaturaImageView = v.findViewById(R.id.aventura_miniatura);
+        tituloAventura = v.findViewById(R.id.aventuraTitulo);
         return v;
     }
 
     private void updateUI(Aventura aventura) {
 
+        viewPager.setAdapter(new AventuraAndamentoPagerAdapter(getChildFragmentManager(), aventura ));
+
+        switch (aventura.getnImage()) {
+            case 0:
+                miniaturaImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.miniatura_coast));
+                break;
+            case 1:
+                miniaturaImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.miniatura_corvali));
+                break;
+            case 2:
+                miniaturaImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.miniatura_heartlands));
+                break;
+            case 3:
+                miniaturaImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.miniatura_imagem_automatica));
+                break;
+            case 4:
+                miniaturaImageView.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.miniatura_krevast));
+                break;
+        }
+        tituloAventura.setText(aventura.getNome());
+//        if (aventura.getSinopse().length() == 0){
+//            sinopseTexto.setText(R.string.no_description);
+//        } else {
+//            sinopseTexto.setText(aventura.getSinopse());
+//        }
     }
 
 //    @Override
@@ -143,8 +179,7 @@ public class AventuraAndamentoFragment extends Fragment {
 //            }
 //        });
 //
-//        TextView tituloAventura = findViewById(R.id.aventuraTitulo);
-//        tituloAventura.setText(aventura.getNome());
+
 //
 //        // Pegar foto de usuario
 //        final ImageView iconeJogador = findViewById(R.id.iconeJogador);
