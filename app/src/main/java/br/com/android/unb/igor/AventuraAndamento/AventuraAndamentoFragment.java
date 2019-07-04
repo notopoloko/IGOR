@@ -3,6 +3,7 @@ package br.com.android.unb.igor.AventuraAndamento;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -14,18 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
+import androidx.navigation.Navigation;
 
-import java.io.File;
-import java.io.IOException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.Date;
 import java.util.UUID;
 
@@ -39,13 +33,41 @@ public class AventuraAndamentoFragment extends Fragment {
     private static final String DIALOG_DATE = "DialogDate";
 
     private ImageView miniaturaImageView;
-    TextView sinopseTexto;
     TextView tituloAventura;
     ViewPager viewPager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        String id;
+        if (bundle != null) {
+            id = bundle.getString(aventura_id);
+            Service.getAventuraByID(id).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot ds = task.getResult();
+                    if (ds != null) {
+                        updateUI(new Aventura(ds.get("nome").toString(),
+                                new Date(),
+                                ds.getLong("nImage").intValue(),
+                                ds.get("mestre").toString(),
+                                ds.get("sinopse").toString(),
+                                UUID.fromString(ds.getId()))
+                        );
+                    } else {
+                        Toast.makeText(getActivity(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "Não foi possível obter o id da aventura", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         Bundle bundle = getArguments();
         String id;
         if (bundle != null) {
@@ -82,6 +104,9 @@ public class AventuraAndamentoFragment extends Fragment {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = v.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        FloatingActionButton fb = v.findViewById(R.id.nova_sessao);
+        fb.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_aventuraAndamentoFragment_to_novaSessaoFragment, null));
 
         miniaturaImageView = v.findViewById(R.id.aventura_miniatura);
         tituloAventura = v.findViewById(R.id.aventuraTitulo);

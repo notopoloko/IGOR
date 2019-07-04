@@ -35,5 +35,17 @@
         android:name="br.com.android.unb.igor.AventuraAndamento.AventuraAndamentoFragment"
         android:label="content_aventura_andamento"
         tools:layout="@layout/content_aventura_andamento">
+        <action
+            android:id="@+id/action_aventuraAndamentoFragment_to_novaSessaoFragment"
+            app:destination="@id/novaSessaoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/novaSessaoFragment"
+        android:name="br.com.android.unb.igor.AventuraAndamento.NovaSessaoFragment"
+        android:label="fragment_nova_sessao"
+        tools:layout="@layout/fragment_nova_sessao" />
 </navigation>

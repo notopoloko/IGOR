@@ -60,4 +60,7 @@
         <item>Masculino</item>
         <item>Feminino</item>
     </string-array>
+    <string name="nome_sessao">Digite o nome da sessão</string>
+    <string name="label_nova_sessao">Digite o nome da nova sessão</string>
+    <string name="pronto">Pronto</string>
 </resources>
