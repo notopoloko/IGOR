@@ -17,10 +17,28 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_aventuraFragment_to_aventuraAndamentoFragment"
+            app:destination="@id/aventuraAndamentoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/novoFragment"
         android:name="br.com.android.unb.igor.NovaAventura.NovoFragment"
         android:label="content_novo"
         tools:layout="@layout/content_novo" />
+    <fragment
+        android:id="@+id/aventuraAndamentoFragment"
+        android:name="br.com.android.unb.igor.AventuraAndamento.AventuraAndamentoFragment"
+        android:label="content_aventura_andamento"
+        tools:layout="@layout/content_aventura_andamento">
+        <argument
+            android:name="aventuraID"
+            app:argType="String"
+            android:defaultValue="nada"
+            />
+    </fragment>
 </navigation>

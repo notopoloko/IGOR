@@ -22,7 +22,6 @@ import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -32,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import br.com.android.unb.igor.AventuraAndamento.AventuraAndamentoActivity;
+import br.com.android.unb.igor.AventuraAndamento.AventuraAndamentoFragment;
 import br.com.android.unb.igor.Model.Aventura;
 import br.com.android.unb.igor.R;
 import br.com.android.unb.igor.Service;
@@ -169,8 +168,9 @@ public class AventuraFragment extends Fragment {
         @Override
         public void onClick(View view) {
             String id = mAventura.getId().toString();
-            Intent i = AventuraAndamentoActivity.newIntent(getContext(), id);
-            startActivity(i);
+            Bundle bundle = new Bundle();
+            bundle.putString(id, AventuraAndamentoFragment.aventura_id);
+            Navigation.findNavController(getActivity(), R.id.nav_host_aventura).navigate(R.id.action_aventuraFragment_to_aventuraAndamentoFragment, bundle);
         }
     }
 

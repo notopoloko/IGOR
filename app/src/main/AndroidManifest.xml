@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".AventuraAndamento.AventuraAndamentoActivity"
+            android:name=".AventuraAndamento.AventuraAndamentoFragment"
             android:label="@string/title_activity_aventura_andamento"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity

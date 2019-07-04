@@ -19,7 +19,7 @@ public class AventuraAndamentoPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return AventuraAndamentoFragment.newInstance(position);
+        return AventuraAndamentoInfoFragment.newInstance(position);
 
 //        return fragment;
     }
