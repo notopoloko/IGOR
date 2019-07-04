@@ -1,4 +1,4 @@
-package br.com.android.unb.igor;
+package br.com.android.unb.igor.Home;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -28,6 +28,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import br.com.android.unb.igor.AventuraAndamento.AventuraAndamentoActivity;
+import br.com.android.unb.igor.Model.Aventura;
+import br.com.android.unb.igor.R;
 
 public class AventuraFragment extends Fragment {
     private RecyclerView mAventuraRecyclerView;

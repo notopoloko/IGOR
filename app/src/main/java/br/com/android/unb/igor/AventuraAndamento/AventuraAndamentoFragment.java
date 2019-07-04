@@ -1,4 +1,4 @@
-package br.com.android.unb.igor;
+package br.com.android.unb.igor.AventuraAndamento;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import br.com.android.unb.igor.R;
 
 public class AventuraAndamentoFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";

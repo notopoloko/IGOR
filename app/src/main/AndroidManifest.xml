@@ -10,19 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".AventuraAndamentoActivity"
+            android:name=".AventuraAndamento.AventuraAndamentoActivity"
             android:label="@string/title_activity_aventura_andamento"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".NovoActivity"
+            android:name=".NovaAventura.NovoActivity"
             android:label="@string/title_activity_novo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".Home.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LogInActivity"
+            android:name=".Login.LogInActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

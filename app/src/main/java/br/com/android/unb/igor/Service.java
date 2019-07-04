@@ -4,13 +4,15 @@ package br.com.android.unb.igor;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import br.com.android.unb.igor.Model.Aventura;
+import br.com.android.unb.igor.Model.Jogador;
 
 public class Service {
 

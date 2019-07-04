@@ -56,4 +56,8 @@
     <string name="data_nascimento">Data de nascimento</string>
     <string name="sexo">Sexo</string>
     <string name="criar">Criar</string>
+    <string-array name="spinner_sexo">
+        <item>Masculino</item>
+        <item>Feminino</item>
+    </string-array>
 </resources>

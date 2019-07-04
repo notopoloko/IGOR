@@ -1,4 +1,4 @@
-package br.com.android.unb.igor;
+package br.com.android.unb.igor.AventuraAndamento;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -1,4 +1,4 @@
-package br.com.android.unb.igor;
+package br.com.android.unb.igor.AventuraAndamento;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +21,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import br.com.android.unb.igor.Model.Jogador;
+import br.com.android.unb.igor.R;
+import br.com.android.unb.igor.Service;
 
 public class AventuraAndamentoJogadoresFragment extends Fragment {
     private RecyclerView mRecyclerView;

@@ -1,4 +1,4 @@
-package br.com.android.unb.igor;
+package br.com.android.unb.igor.NovaAventura;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,11 +21,14 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
+
+import br.com.android.unb.igor.Model.Aventura;
+import br.com.android.unb.igor.R;
+import br.com.android.unb.igor.Service;
 
 public class NovoActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Random mRandom = new Random();

@@ -6,7 +6,7 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="br.com.android.unb.igor.LoginFragment"
+        android:name="br.com.android.unb.igor.Login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
 
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/novoJogadorFragment"
-        android:name="br.com.android.unb.igor.NovoJogadorFragment"
+        android:name="br.com.android.unb.igor.Login.NovoJogadorFragment"
         android:label="fragment_nova_conta"
         tools:layout="@layout/fragment_nova_conta" />
 </navigation>

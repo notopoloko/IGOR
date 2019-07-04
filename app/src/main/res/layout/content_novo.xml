@@ -7,7 +7,7 @@
     android:background="@drawable/igor_login_backgrownd2"
     app:layout_constraintCircleRadius="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".NovoActivity"
+    tools:context=".NovaAventura.NovoActivity"
     tools:showIn="@layout/app_bar_novo">
 
 

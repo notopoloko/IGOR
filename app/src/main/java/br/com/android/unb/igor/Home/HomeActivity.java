@@ -1,4 +1,4 @@
-package br.com.android.unb.igor;
+package br.com.android.unb.igor.Home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import br.com.android.unb.igor.NovaAventura.NovoActivity;
+import br.com.android.unb.igor.R;
 
 public class HomeActivity extends AppCompatActivity {
 
