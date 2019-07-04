@@ -9,9 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.Date;
+import java.util.UUID;
 
 import br.com.android.unb.igor.Model.Aventura;
 import br.com.android.unb.igor.R;
+import br.com.android.unb.igor.Service;
 
 public class AventuraAndamentoInfoFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -47,10 +56,23 @@ public class AventuraAndamentoInfoFragment extends Fragment {
             FragmentManager fm = getActivity().getSupportFragmentManager();
             Fragment fragment = fm.findFragmentById(R.id.jogador_item_frame_layout);
 
+            final TextView nomeMestre = v.findViewById(R.id.nomeJogador);
             if (fragment == null) {
                 fragment  = new AventuraAndamentoJogadoresFragment();
                 fm.beginTransaction().add(R.id.jogador_item_frame_layout, fragment).commit();
             }
+
+            Service.getJogador(aventura.getMestre()).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot ds = task.getResult();
+                        nomeMestre.setText(ds.get("nome").toString());
+                    } else {
+                        Toast.makeText(getActivity(), "Erro ao resgatar o mestre", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
             return v;
         }
