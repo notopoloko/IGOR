@@ -3,4 +3,14 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="white_maroto">#FFF</color>
+    <color name="fundo_botao_entrar">#00e2ba</color>
+    <color name="top_layout">#050F2B</color>
+    <color name="dark_white">#D6D3D3</color>
+
+    <color name="dark">#424242</color>
+    <color name="rediant_red">#FF3D55</color>
+    <color name="navabar_background_color">#221133</color>
+    <color name="overlay">#4A474F</color>
 </resources>

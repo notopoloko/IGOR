@@ -1,3 +1,59 @@
 <resources>
+    <!--Tela de Login-->
     <string name="app_name">IGOR</string>
+    <string name="signout">Sign Out</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="ou">Ou</string>
+    <string name="esqueci_minha_senha">esqueci minha senha</string>
+    <string name="criar_conta">criar conta</string>
+    <string name="entrar">ENTRAR</string>
+    <string name="manter_conectado">manter-me conectado</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <!--Lista de aventuras-->
+    <string name="igor_icon">Icone IGOR</string>
+    <string name="aventura_name">NOME DA AVENTURA</string>
+    <string name="proxima_sessao">Próxima sessão</string>
+    <string name="title_activity_novo">NovoActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="aventuras">Aventuras</string>
+    <string name="livros">Livros</string>
+    <string name="conta">Conta</string>
+    <string name="notificacoes">Notificações</string>
+    <string name="configuracoes">Configurações</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <!--Nova aventura-->
+    <string name="criar_aventura">Criar Aventura</string>
+    <string name="label_nome">Dê um nome para a sua aventura</string>
+    <string name="nome_aventura">Digite o nome da aventura</string>
+    <string name="label_sinopse_aventura">Dê uma sinopse à sua aventura</string>
+    <string name="sinopse_aventura">Digite a sinopse da sua aventura</string>
+    <string name="andamento">Andamento</string>
+    <string name="jogadores">Jogadores</string>
+    <string name="title_activity_aventura_andamento">AventuraAndamentoActivity</string>
+    <string name="no_description">Aventura sem descrição</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    
+    <!--Aventura Andamento-->
+    <string name="mestre">Mestre</string>
+    <string name="date_picker_title">Data da nova sessão</string>
+    
+    <!--Nova conta-->
+    <string name="nome_de_usuario">Nome de usuário</string>
+    <string name="data_nascimento">Data de nascimento</string>
+    <string name="sexo">Sexo</string>
+    <string name="criar">Criar</string>
 </resources>
