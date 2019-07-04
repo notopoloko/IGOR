@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.navigation.Navigation;
@@ -40,10 +41,38 @@ public class LoginFragment extends Fragment {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mFirebaseAuth;
 
+    private TextView login_view;
+    private TextView senha_view;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
+
+        login_view = v.findViewById(R.id.login_email);
+        senha_view = v.findViewById(R.id.login_senha);
+
+        Button botaoLogar = v.findViewById(R.id.botao_logar);
+        botaoLogar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = login_view.getText().toString();
+                String senha = senha_view.getText().toString();
+                if (email.equals("") || senha.equals(""))
+                    return;
+                mFirebaseAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText(getContext(), "Succesful signed in", Toast.LENGTH_SHORT).show();
+                            startActivity(HomeActivity.newIntent(getContext()));
+                        } else {
+                            Toast.makeText(getContext(), "Erro ao autenticar", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
 
         Button novaConta = v.findViewById(R.id.criar_conta);
         novaConta.setOnClickListener(

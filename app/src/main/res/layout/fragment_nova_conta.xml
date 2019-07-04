@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/fundo_botao_entrar"
         android:text="@string/criar"
         app:layout_constraintBottom_toBottomOf="parent"

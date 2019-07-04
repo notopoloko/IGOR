@@ -11,16 +11,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.navigation.Navigation;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import br.com.android.unb.igor.Model.Jogador;
 import br.com.android.unb.igor.R;
+import br.com.android.unb.igor.Service;
 
 
 public class NovoJogadorFragment extends Fragment {
@@ -31,6 +38,7 @@ public class NovoJogadorFragment extends Fragment {
     private TextView mNomeUsuario;
     private TextView mDataNascimento;
     private Spinner mSexo;
+    private boolean verificacaoStatus;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,29 +68,51 @@ public class NovoJogadorFragment extends Fragment {
     }
 
     private void criarConta() {
-        String email = mEmail.getText().toString();
-        String senha = mSenha.getText().toString();
-        String nome = mNomeUsuario.getText().toString();
-        String sexo = mSexo.getSelectedItem().toString();
-        Date dataNascimento = new Date(mDataNascimento.getText().toString());
-
-        Jogador novoJogador = new Jogador(UUID.randomUUID().toString(), email, senha, nome, sexo, dataNascimento);
-
-        if (!email.equals("") && !senha.equals("")){
-            mFirebaseAuth.createUserWithEmailAndPassword(email, senha)
-                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
-
-                            } else {
-
-                            }
-                        }
-                    });
-        } else {
-            Toast.makeText(getContext(), "Preencha as informações de email e senha corretamente", Toast.LENGTH_SHORT).show();
+        final String email = mEmail.getText().toString();
+        final String senha = mSenha.getText().toString();
+        final String nome = mNomeUsuario.getText().toString();
+        final String sexo = mSexo.getSelectedItem().toString();
+        final Date dataNascimento;
+        try {
+            String a = mDataNascimento.getText().toString();
+            dataNascimento = (new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)).parse(a);
+        } catch (ParseException e) {
+            Toast.makeText(getContext(), "Preencha a data com formato: dd/mm/yyyy", Toast.LENGTH_SHORT).show();
+            return;
         }
+        if (email.equals("") || senha.equals("") || sexo.equals("") || nome.equals("")){
+            Toast.makeText(getContext(), "Preencha os dados corretamente", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mFirebaseAuth.createUserWithEmailAndPassword(email, senha)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            sendVerificationMail();
+                            Jogador novoJogador = new Jogador(FirebaseAuth.getInstance().getCurrentUser().getUid(), email, senha, nome, sexo, dataNascimento);
+                            Toast.makeText(getContext(), "Usuário criado. Dê uma olhada no seu email enquanto criamos seu jogador", Toast.LENGTH_LONG).show();
+                            Service.postJogador(novoJogador).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    getFragmentManager().popBackStack();
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(getContext(), "Usuário não criado", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+    }
+
+    private void sendVerificationMail() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if ( user == null )
+            return;
+        user.sendEmailVerification();
     }
 
 
