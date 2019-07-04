@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,28 +35,23 @@ import java.util.UUID;
 import br.com.android.unb.igor.AventuraAndamento.AventuraAndamentoActivity;
 import br.com.android.unb.igor.Model.Aventura;
 import br.com.android.unb.igor.R;
+import br.com.android.unb.igor.Service;
 
 public class AventuraFragment extends Fragment {
     private RecyclerView mAventuraRecyclerView;
     private AventuraAdapter mAventuraAdapter;
 
-    @Nullable
+    ProgressBar pb;
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.content_home, container, false);
-
-        final ProgressBar pb = view.findViewById(R.id.progress_bar);
-        mAventuraRecyclerView = view.findViewById(R.id.aventura_recycler_view);
-
-        mAventuraRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // Atualizar view com dados vindos do Firebase
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("aventuras").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Service.getAventuras().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    ArrayList<Aventura> aventuras = new ArrayList<>();
-                    for (QueryDocumentSnapshot document: task.getResult()) {
+                    List<Aventura> aventuras = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
                         // Pensar numa maneira deixar isso generalizado
                         Map<String, Object> data = document.getData();
                         aventuras.add(new Aventura(
@@ -64,13 +62,27 @@ public class AventuraFragment extends Fragment {
                                 document.getString("sinopse"),
                                 UUID.randomUUID()));
                     }
+                    pb.setIndeterminateTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.overlay)));
                     updateUI(aventuras);
                 } else {
                     Toast.makeText(getContext(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
                 }
-                pb.setIndeterminateTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.overlay)));
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.content_home, container, false);
+        mAventuraRecyclerView = view.findViewById(R.id.aventura_recycler_view);
+
+        pb = view.findViewById(R.id.progress_bar);
+
+        mAventuraRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        FloatingActionButton fb = view.findViewById(R.id.fab);
+        fb.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_aventuraFragment_to_novoFragment, null));
 
         return view;
     }
@@ -78,20 +90,13 @@ public class AventuraFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("aventuras").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        pb.setIndeterminateTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.rediant_red)));
+
+        Service.getAventuras().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-
-                    List<Aventura> aventuras;
-                    if (mAventuraAdapter == null){
-                        aventuras = new ArrayList<Aventura>();
-                    } else {
-                        aventuras = mAventuraAdapter.getAdapterAventuras();
-                        aventuras.clear();
-                    }
-
+                    List<Aventura> aventuras = new ArrayList<>();
                     for (QueryDocumentSnapshot document: task.getResult()) {
                         // Pensar numa maneira deixar isso generalizado
                         Map<String, Object> data = document.getData();
@@ -103,6 +108,7 @@ public class AventuraFragment extends Fragment {
                                 document.getString("sinopse"),
                                 UUID.fromString(document.getId())));
                     }
+                    pb.setIndeterminateTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.overlay)));
                     updateUI(aventuras);
                 } else {
                     Toast.makeText(getContext(), "Erro ao resgatar registros do back", Toast.LENGTH_SHORT).show();
@@ -111,11 +117,14 @@ public class AventuraFragment extends Fragment {
         });
     }
 
-    private void updateUI(List<Aventura> aventuraList){
+    private void updateUI(List<Aventura> adventures){
         if (mAventuraAdapter == null) {
-            mAventuraAdapter = new AventuraAdapter(aventuraList);
+            mAventuraAdapter = new AventuraAdapter(adventures);
             mAventuraRecyclerView.setAdapter(mAventuraAdapter);
         } else {
+            mAventuraRecyclerView.setAdapter(mAventuraAdapter);
+            mAventuraAdapter.getListAventuras().clear();
+            mAventuraAdapter.getListAventuras().addAll(adventures);
             mAventuraAdapter.notifyDataSetChanged();
         }
     }
@@ -190,7 +199,7 @@ public class AventuraFragment extends Fragment {
             return mAventuras.size();
         }
 
-        public List<Aventura> getAdapterAventuras(){
+        public List <Aventura> getListAventuras(){
             return mAventuras;
         }
     }

@@ -14,7 +14,7 @@
             android:label="@string/title_activity_aventura_andamento"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".NovaAventura.NovoActivity"
+            android:name=".NovaAventura.NovoFragment"
             android:label="@string/title_activity_novo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
